@@ -1,3 +1,4 @@
+// 角色設定
 class BaseCharacter {
   constructor(name, hp, ap) {
     this.name = name;
@@ -7,7 +8,7 @@ class BaseCharacter {
     this.alive = true
   }
   attack(character, damage) {
-    if (this.alive == flase){
+    if (this.alive == false){
       return;
     }
     character.getHurt(damage);
@@ -27,7 +28,7 @@ class BaseCharacter {
     hurtElement.style.width = (100 - this.hp / this.maxHp * 100) + "%";
   }
 }
-
+// 英雄角色設定
 class Hero extends BaseCharacter{
   constructor(name, hp, ap) {
     super(name, hp, ap);
@@ -52,7 +53,7 @@ class Hero extends BaseCharacter{
     this.updateHtml(this.hpElement, this.hurtElement);
   }
 }
-
+// 怪物角色設定
 class Monster extends BaseCharacter{
   constructor(name, hp, ap) {
     super(name, hp, ap);
@@ -78,7 +79,57 @@ class Monster extends BaseCharacter{
   }
 }
 
-
 //印出角色
 var hero = new Hero("Bernard", 130, 30);
 var monster = new Monster("Skeleton", 130, 10);
+
+//回合設定
+var rounds = 10;
+function endTurn() {
+  rounds--;
+  document.getElementById("round-num").textContent = rounds;
+  if (rounds < 1) {
+    // 「遊戲結束」空白區
+  }
+}
+
+// 施放技能後隱藏英雄技能 
+function heroAttack() {
+  document.getElementsByClassName("skill-block")[0].style.display = "none";
+
+  setTimeout(function() {
+    hero.element.classList.add("attacking");
+    setTimeout(function() {
+      hero.attack(monster);
+      hero.element.classList.remove("attacking");
+    }, 500);
+  }, 100);
+
+
+  setTimeout(function() {
+    if (monster.alive) {
+      monster.element.classList.add("attacking");
+      setTimeout(function() {
+        monster.attack(hero);
+        monster.element.classList.remove("attacking");
+        endTurn();
+        if (hero.alive == false) {
+          // 「遊戲結束」空白區
+        } else {
+          document.getElementsByClassName("skill-block")[0].style.display = "block";
+        }
+      }, 500);
+    } else {
+      // 「遊戲結束」空白區
+    }
+  }, 1100);
+}
+
+// 英雄技能部分
+function addSkillEvent() {
+  var skill = document.getElementById("skill");
+  skill.onclick = function() { 
+    heroAttack(); 
+  }
+}
+addSkillEvent();

@@ -71,6 +71,16 @@ class Hero extends BaseCharacter{
     super.attack(character, Math.floor(damage));
   }
 
+  heal (somehp) {
+    this.hp += somehp;
+
+    if (this.hp > this.maxHp) {
+      this.hp = this.maxHp ;
+    }
+
+    this.updateHtml(this.hpElement, this.hurtElement);
+  }
+
   getHurt(damage) {
     super.getHurt(damage);
     this.updateHtml(this.hpElement, this.hurtElement);
@@ -148,14 +158,26 @@ function heroAttack() {
   }, 1100);
 }
 
-// 英雄技能部分
+
+function healthy(){
+  document.getElementsByClassName("skill-block")[0].style.display = "none";  
+
+  hero.heal(30);
+}
+
+// 英雄技能
 function addSkillEvent() {
   var skill = document.getElementById("skill");
   skill.onclick = function() { 
     heroAttack(); 
   }
+  var heal = document.getElementById("heal");
+  heal.onclick = function() {
+    healthy();
+  }
 }
 addSkillEvent();
+
 
 // 結束視窗
 function finish() {

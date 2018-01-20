@@ -19,7 +19,30 @@ class BaseCharacter {
     if (this.hp <= 0){
       this.die();
     }
+
+    var _this = this;
+    var i = 1;
+
+    _this.id = setInterval(function() {
+      
+      if (i == 1) {
+        _this.element.getElementsByClassName("effect-image")[0].style.display = "block";
+        _this.element.getElementsByClassName("hurt-text")[0].classList.add("attacked");
+        _this.element.getElementsByClassName("hurt-text")[0].textContent = damage;
+      }
+        
+      _this.element.getElementsByClassName("effect-image")[0].src = 'image/effect/blade/'+ i +'.png';
+      i++;
+
+      if (i > 8) {
+        _this.element.getElementsByClassName("effect-image")[0].style.display = "none";
+        _this.element.getElementsByClassName("hurt-text")[0].classList.remove("attacked");
+        _this.element.getElementsByClassName("hurt-text")[0].textContent = "";
+        clearInterval(_this.id);
+      }
+    }, 50);
   }
+
   die() {
     this.alive = false;
   }
@@ -35,8 +58,8 @@ class Hero extends BaseCharacter{
 
     this.element = document.getElementById("hero-image-block");
     this.hpElement = document.getElementById("hero-hp");
-    this.hurtElement = document.getElementById("hero-hp-hurt");
     this.maxHpElement = document.getElementById("hero-max-hp");
+    this.hurtElement = document.getElementById("hero-hp-hurt");
 
     this.hpElement.textContent = this.hp;
     this.maxHpElement.textContent = this.maxHp;
@@ -60,8 +83,8 @@ class Monster extends BaseCharacter{
 
     this.element = document.getElementById("monster-image-block");
     this.hpElement = document.getElementById("monster-hp");
-    this.hurtElement = document.getElementById("monster-hp-hurt");
     this.maxHpElement = document.getElementById("monster-max-hp");
+    this.hurtElement = document.getElementById("monster-hp-hurt");
 
     this.hpElement.textContent = this.hp;
     this.maxHpElement.textContent = this.maxHp;

@@ -5,7 +5,7 @@ class BaseCharacter {
     this.hp = hp;
     this.maxHp = hp;
     this.ap = ap;
-    this.alive = true
+    this.alive = true;
   }
   attack(character, damage) {
     if (this.alive == false){
@@ -103,8 +103,8 @@ class Monster extends BaseCharacter{
 }
 
 //印出角色
-var hero = new Hero("Bernard", 130, 30);
-var monster = new Monster("Skeleton", 130, 10);
+var hero = new Hero("Bernard", 130, 50);
+var monster = new Monster("Skeleton", 130, 5);
 
 //回合設定
 var rounds = 10;
@@ -112,7 +112,7 @@ function endTurn() {
   rounds--;
   document.getElementById("round-num").textContent = rounds;
   if (rounds < 1) {
-    // 「遊戲結束」空白區
+    finish();
   }
 }
 
@@ -137,13 +137,13 @@ function heroAttack() {
         monster.element.classList.remove("attacking");
         endTurn();
         if (hero.alive == false) {
-          // 「遊戲結束」空白區
+          finish();
         } else {
           document.getElementsByClassName("skill-block")[0].style.display = "block";
         }
       }, 500);
     } else {
-      // 「遊戲結束」空白區
+      finish();
     }
   }, 1100);
 }
@@ -156,3 +156,16 @@ function addSkillEvent() {
   }
 }
 addSkillEvent();
+
+// 結束視窗
+function finish() {
+  var dialog = document.getElementById("dialog")
+  dialog.style.display = "block";
+  if (monster.alive == false) {
+    dialog.classList.add("win");
+  } else if (hero.alive == false) {
+    dialog.classList.add("lose");
+  } else {
+    dialog.classList.add("draw");
+  }
+}

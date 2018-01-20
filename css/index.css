@@ -166,7 +166,8 @@
 
 /* 預設 .win-dialog 與 .lose-dialog 為關閉，及其他共用的CSS */
 #dialog .win-dialog,
-#dialog .lose-dialog {
+#dialog .lose-dialog,
+#dialog .draw-dialog {
   display: none;
   position: relative;
   margin: 0 auto;
@@ -184,5 +185,9 @@
 
 /* #dialog 同時有 lose class 的話 把下面的lose-block 打開 */
 #dialog.lose .lose-dialog {
+  display: block;
+}
+
+#dialog.draw .draw-dialog {
   display: block;
 }

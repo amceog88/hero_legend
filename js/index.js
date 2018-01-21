@@ -77,8 +77,22 @@ class Hero extends BaseCharacter{
     if (this.hp > this.maxHp) {
       this.hp = this.maxHp ;
     }
-
+    var _this = this;
+    var i = 1;
     this.updateHtml(this.hpElement, this.hurtElement);
+
+
+    _this.element.getElementsByClassName("heal-text")[0].classList.add("healed");
+    _this.element.getElementsByClassName("heal-text")[0].innerHTML = somehp;
+
+    _this.id = setInterval(function(){
+
+      _this.element.getElementsByClassName("heal-text")[0].classList.remove("healed");
+      _this.element.getElementsByClassName("heal-text")[0].textContent = "";
+      clearInterval(_this.id);
+      
+    },300);
+
   }
 
   getHurt(damage) {
@@ -114,7 +128,7 @@ class Monster extends BaseCharacter{
 
 //印出角色
 var hero = new Hero("Bernard", 130, 50);
-var monster = new Monster("Skeleton", 130, 5);
+var monster = new Monster("Skeleton", 130, 20);
 
 //回合設定
 var rounds = 10;
@@ -126,7 +140,7 @@ function endTurn() {
   }
 }
 
-// 施放技能後隱藏英雄技能 
+// 施放技能的回合
 function heroAttack() {
   document.getElementsByClassName("skill-block")[0].style.display = "none";
 
@@ -158,11 +172,36 @@ function heroAttack() {
   }, 1100);
 }
 
-
+//使用恢復的回合
 function healthy(){
+
   document.getElementsByClassName("skill-block")[0].style.display = "none";  
 
-  hero.heal(30);
+
+
+  setTimeout(function() {
+    hero.element.classList.add("healing");
+    hero.heal(30);
+    hero.element.classList.remove("healing");
+  }, 500);
+
+  setTimeout(function() {
+    if (monster.alive) {
+      monster.element.classList.add("attacking");
+      setTimeout(function() {
+        monster.attack(hero);
+        monster.element.classList.remove("attacking");
+        endTurn();
+        if (hero.alive == false) {
+          finish();
+        } else {
+          document.getElementsByClassName("skill-block")[0].style.display = "block";
+        }
+      }, 500);
+    } else {
+      finish();
+    }
+  }, 1100);  
 }
 
 // 英雄技能

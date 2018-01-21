@@ -71,6 +71,7 @@ class Hero extends BaseCharacter{
     super.attack(character, Math.floor(damage));
   }
 
+//恢復技能及特效
   heal (somehp) {
     this.hp += somehp;
 
@@ -81,17 +82,23 @@ class Hero extends BaseCharacter{
     var i = 1;
     this.updateHtml(this.hpElement, this.hurtElement);
 
+    _this.id = setInterval(function() {
+      if (i == 1) {
+        _this.element.getElementsByClassName("healeffect-image")[0].style.display = "block";
+        _this.element.getElementsByClassName("heal-text")[0].classList.add("healed");
+        _this.element.getElementsByClassName("heal-text")[0].innerHTML = somehp;
+      }
 
-    _this.element.getElementsByClassName("heal-text")[0].classList.add("healed");
-    _this.element.getElementsByClassName("heal-text")[0].innerHTML = somehp;
+      _this.element.getElementsByClassName("healeffect-image")[0].src = 'image/effect/heal/'+ i +'.png';
+      i++;
 
-    _this.id = setInterval(function(){
-
-      _this.element.getElementsByClassName("heal-text")[0].classList.remove("healed");
-      _this.element.getElementsByClassName("heal-text")[0].textContent = "";
-      clearInterval(_this.id);
-      
-    },300);
+      if (i > 8) {
+        _this.element.getElementsByClassName("healeffect-image")[0].style.display = "none";
+        _this.element.getElementsByClassName("heal-text")[0].classList.remove("healed");
+        _this.element.getElementsByClassName("heal-text")[0].textContent = "";
+        clearInterval(_this.id);
+      }
+    },50);
 
   }
 

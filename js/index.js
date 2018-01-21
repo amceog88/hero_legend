@@ -150,7 +150,7 @@ function endTurn() {
 // 施放技能的回合
 function heroAttack() {
   document.getElementsByClassName("skill-block")[0].style.display = "none";
-
+  skillcd = false;
   setTimeout(function() {
     hero.element.classList.add("attacking");
     setTimeout(function() {
@@ -171,6 +171,7 @@ function heroAttack() {
           finish();
         } else {
           document.getElementsByClassName("skill-block")[0].style.display = "block";
+          skillcd = true;
         }
       }, 500);
     } else {
@@ -183,8 +184,7 @@ function heroAttack() {
 function healthy(){
 
   document.getElementsByClassName("skill-block")[0].style.display = "none";  
-
-
+  skillcd = false;
 
   setTimeout(function() {
     hero.element.classList.add("healing");
@@ -203,6 +203,7 @@ function healthy(){
           finish();
         } else {
           document.getElementsByClassName("skill-block")[0].style.display = "block";
+          skillcd = true;
         }
       }, 500);
     } else {
@@ -216,6 +217,7 @@ function addSkillEvent() {
   var skill = document.getElementById("skill");
   skill.onclick = function() { 
     heroAttack(); 
+
   }
   var heal = document.getElementById("heal");
   heal.onclick = function() {
@@ -223,6 +225,21 @@ function addSkillEvent() {
   }
 }
 addSkillEvent();
+
+//按鍵驅動技能
+var skillcd = true;
+
+document.onkeydown = function(event){
+  var key = String.fromCharCode(event.keyCode);
+
+    if (key == "A" && skillcd == true) {
+    heroAttack();
+
+    } else if (key == "D" && skillcd == true) {
+      healthy();
+    }
+
+}
 
 
 // 結束視窗
